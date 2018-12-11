@@ -1,0 +1,28 @@
+$(document).on('ready', function() {
+  var countryCities = {};
+  var cities = [];
+
+  <% @countries.each do |country| %>
+    cities = [];
+
+    <% country.cities.each do |city| %>
+    cities.push({id: '<%= city.id %>', name: '<%= city.name %>'});
+    <% end %>
+
+    countryCities[<%= country.id %>] = cities;
+  <% end %>
+
+  $('.js-select-country').on('change', function() {
+    var countryId = $('.js-select-country').val();
+    var cities = countryCities[countryId];
+
+    $('.js-select-city option').remove();
+    for (var i = 0; i < cities.length; i++ ) {
+      var city = cities[i];
+      var cityId = city['id'];
+      var cityName = city['name'];
+      $('.js-select-city').append(new Option(cityName, cityId));
+    }
+  });
+});
+
